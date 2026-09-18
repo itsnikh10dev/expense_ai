@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExpenseAI</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <span class="rail-brand-mark">EA</span>
+      <span class="rail-brand-name">ExpenseAI</span>
+    </div>
+
+    <nav class="rail-nav">
+      <button class="rail-link is-active" data-page="home">
+        <span class="rail-link-idx">01</span> Home
+      </button>
+      <button class="rail-link" data-page="dashboard">
+        <span class="rail-link-idx">02</span> Dashboard
+      </button>
+      <button class="rail-link" data-page="expenses">
+        <span class="rail-link-idx">03</span> Expenses
+      </button>
+      <button class="rail-link" data-page="upload">
+        <span class="rail-link-idx">04</span> Upload Bills
+      </button>
+      <button class="rail-link" data-page="assistant">
+        <span class="rail-link-idx">05</span> AI Assistant
+      </button>
+    </nav>
+
+    <div class="rail-foot">
+      <div class="rail-foot-line"></div>
+      <p>Local SQLite ledger.<br>Nothing leaves this machine except your questions to Ollama.</p>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main">
+
+    <!-- ---------- HOME ---------- -->
+    <section class="page is-active" id="page-home">
+      <header class="hero">
+        <p class="hero-eyebrow">Expense intelligence, self-hosted</p>
+        <h1 class="hero-title">Turn bills into intelligent<br>financial insights.</h1>
+        <p class="hero-sub">Upload a receipt or invoice. ExpenseAI cleans the image, reads it with OCR,
+          extracts structured line items with a local LLM, and files everything into a queryable ledger —
+          so you can ask about your spending the way you'd ask a person.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-goto="upload">Upload a bill</button>
+          <button class="btn btn-ghost" data-goto="assistant">Ask the assistant</button>
+        </div>
+      </header>
+
+      <div class="flow">
+        <div class="flow-step"><span>Bill</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><span>OCR</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><span>Structured data</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><span>SQLite</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step"><span>AI query</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step flow-step-final"><span>Insight</span></div>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature">
+          <h3>OCR bill capture</h3>
+          <p>Drop in a JPG, PNG, or PDF. The image is cleaned and read automatically, then handed to the
+            extraction pipeline — no manual data entry.</p>
+        </article>
+        <article class="feature">
+          <h3>Structured expense data</h3>
+          <p>Every line item lands in a local SQLite ledger with category, amount, invoice number, and date —
+            ready to filter, sort, and chart.</p>
+        </article>
+        <article class="feature">
+          <h3>Expense analytics</h3>
+          <p>See totals, category breakdowns, and trends over time the moment your first bill is processed.</p>
+        </article>
+        <article class="feature">
+          <h3>AI Assistant</h3>
+          <p>Ask a plain-English question. It's translated into SQL, run against your ledger, and answered
+            with the real result — not a canned response.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ---------- DASHBOARD ---------- -->
+    <section class="page" id="page-dashboard">
+      <div class="page-head">
+        <div>
+          <p class="page-eyebrow">Overview</p>
+          <h2>Dashboard</h2>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="dashboard-refresh">Refresh</button>
+      </div>
+
+      <div id="dashboard-empty" class="empty-state" hidden>
+        <h3>No data yet</h3>
+        <p>Process your first bill on the Upload Bills page to see metrics here.</p>
+        <button class="btn btn-primary btn-sm" data-goto="upload">Upload a bill</button>
+      </div>
+
+      <div id="dashboard-content" hidden>
+        <div class="kpi-strip" id="kpi-strip"></div>
+
+        <div class="chart-row">
+          <div class="panel">
+            <h3>Expenses by category</h3>
+            <div class="chart-wrap"><canvas id="chart-category"></canvas></div>
+            <p class="panel-empty" id="chart-category-empty" hidden>No category/amount data available yet.</p>
+          </div>
+          <div class="panel">
+            <h3>Expense trend</h3>
+            <div class="chart-wrap"><canvas id="chart-trend"></canvas></div>
+            <p class="panel-empty" id="chart-trend-empty" hidden>No dated amount data available yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- EXPENSES ---------- -->
+    <section class="page" id="page-expenses">
+      <div class="page-head">
+        <div>
+          <p class="page-eyebrow">Ledger</p>
+          <h2>Expenses</h2>
+        </div>
+        <span class="page-head-count" id="expenses-count"></span>
+      </div>
+
+      <div class="filter-bar">
+        <input type="search" id="filter-search" placeholder="Search all fields…" class="input">
+        <div class="filter-select" id="filter-category-wrap" hidden>
+          <button class="filter-select-btn" id="filter-category-btn">Category <span id="filter-category-count"></span></button>
+          <div class="filter-select-menu" id="filter-category-menu"></div>
+        </div>
+        <div class="filter-select" id="filter-invoice-wrap" hidden>
+          <button class="filter-select-btn" id="filter-invoice-btn">Invoice No. <span id="filter-invoice-count"></span></button>
+          <div class="filter-select-menu" id="filter-invoice-menu"></div>
+        </div>
+        <div class="filter-dates" id="filter-dates-wrap" hidden>
+          <input type="date" id="filter-date-from" class="input input-sm">
+          <span>to</span>
+          <input type="date" id="filter-date-to" class="input input-sm">
+        </div>
+        <button class="btn btn-ghost btn-sm" id="filter-clear">Clear filters</button>
+      </div>
+
+      <div id="expenses-empty" class="empty-state" hidden>
+        <h3>No expense records yet</h3>
+        <p>Process your first bill on the Upload Bills page.</p>
+        <button class="btn btn-primary btn-sm" data-goto="upload">Upload a bill</button>
+      </div>
+
+      <div class="table-wrap" id="expenses-table-wrap" hidden>
+        <table class="ledger-table" id="expenses-table">
+          <thead><tr id="expenses-thead-row"></tr></thead>
+          <tbody id="expenses-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- UPLOAD ---------- -->
+    <section class="page" id="page-upload">
+      <div class="page-head">
+        <div>
+          <p class="page-eyebrow">Intake</p>
+          <h2>Upload Bills</h2>
+        </div>
+      </div>
+
+      <div class="upload-layout">
+        <label class="dropzone" id="dropzone" for="file-input">
+          <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.pdf" hidden>
+          <div class="dropzone-inner">
+            <div class="dropzone-icon">＋</div>
+            <p class="dropzone-title">Drag a bill here, or click to browse</p>
+            <p class="dropzone-sub">JPG · JPEG · PNG · PDF</p>
+          </div>
+        </label>
+
+        <div class="pipeline-card">
+          <h3>Processing pipeline</h3>
+          <ol class="pipeline-steps" id="pipeline-steps">
+            <li data-step="convert"><span class="dot"></span><span class="label">Prepare file</span></li>
+            <li data-step="clean"><span class="dot"></span><span class="label">Clean image</span></li>
+            <li data-step="ocr"><span class="dot"></span><span class="label">Run OCR</span></li>
+            <li data-step="extract"><span class="dot"></span><span class="label">Extract with AI</span></li>
+            <li data-step="save"><span class="dot"></span><span class="label">Save to database</span></li>
+          </ol>
+          <div class="pipeline-status" id="pipeline-status">Waiting for a file.</div>
+          <button class="btn btn-primary" id="process-btn" disabled>Process bill</button>
+        </div>
+      </div>
+
+      <div class="upload-log" id="upload-log"></div>
+    </section>
+
+    <!-- ---------- AI ASSISTANT ---------- -->
+    <section class="page" id="page-assistant">
+      <div class="page-head">
+        <div>
+          <p class="page-eyebrow">Ask your ledger</p>
+          <h2>AI Assistant</h2>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="chat-clear">Clear chat</button>
+      </div>
+
+      <div class="chat-shell">
+        <div class="chat-scroll" id="chat-scroll">
+          <div class="chat-empty" id="chat-empty">
+            <p class="chat-empty-title">Try asking</p>
+            <div class="chat-suggestions">
+              <button class="suggestion">Which category has the most expenses?</button>
+              <button class="suggestion">Show me my invoice records</button>
+              <button class="suggestion">Give me an overview of my expenses</button>
+              <button class="suggestion">Show my largest invoices</button>
+            </div>
+          </div>
+          <div id="chat-messages"></div>
+        </div>
+
+        <form class="chat-input-bar" id="chat-form">
+          <input type="text" id="chat-input" class="input" placeholder="Ask anything about your expenses…" autocomplete="off">
+          <button type="submit" class="btn btn-primary" id="chat-send">Send</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/chart.umd.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

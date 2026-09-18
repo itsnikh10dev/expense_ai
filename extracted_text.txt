@@ -1,0 +1,104 @@
+
+-- Text from ChatGPT Image Sep 18_ 2026_ 02_18_18 PM.png--
+SAMPLE / DEMO — NOT A REAL RECEIPT
+
+S()CIAL
+
+SOCIAL
+
+Connaught Place
+New Delhi - 110001
+
+GOOD FOOD . GREAT VIBES . SOCIAL
+
+Invoice No : DEMO-2026-0918-001
+
+Table No : 12
+
+Date > 18-09-2026
+
+Time > 07:42 PM
+
+Server : Demo Server
+
+Item Qty Rate (%) Amount (%)
+_ Black Label Butter Chicken 1 515.00 515.00
+
+Dal Makhani 1 350.00 350.00
+
+Classic Mac N Cheese 1 395.00 395.00
+
+Butter Chicken Biryani 1 490.00 490.00
+' Subtotal 1,750.00
+
+Service Charge (10%) 175.00
+GST (5%) 96.25
+[0 nan n ene eee ee eee eee
+{ Grand Total % 2,021.25
+
+‘Payment Method : UPI - PAID
+UPI Reference : DEMOUPI20260918
+
+Opa tei
+| Scan to verify (Demo)
+
+Thank you for dining with us!
+SAMPLE / DEMO — NOT A REAL RECEIPT
+
+SR
+
+
+-- Text from ChatGPT Image Sep 18_ 2026_ 02_27_17 PM.png--
+THE
+
+@
+BANYAN
+
+KITCHEN & BAR
+
+GOOD FOOD + GREAT MOOD
+
+The Banyan Kitchen & Bar
+
+Shop No. 12, Ground Floor,
+DLF Avenue, Saket,
+New Delhi - 110017
+
+Phone: +91 11 4652 7788
+
+etetatatel Dine In -------
+Bill No: TBK-0004587 Cashier : Rohan
+Table No : 7 Pax 23
+Date : 23-09-2026 Terminal : POS-01
+Time : 08:14 PM
+Item Qty Rate (%) Amount (%)
+Mangherita Pizza 1 349.00 349.00
+Paneer Tikka (Starter) 1 289.00 289.00
+Butter Naan 2 69.00 138.00
+Dal Makhani 1 249.00 249.00
+Veg Biryani 1 279.00 279.00
+Masala Coke 2 89.00 178.00
+Chocolate Brownie 1 159.00 159.00
+
+Sub Total 1,641.00
+Discount -82.00
+Service Charge (10%) 155.90
+CGST (2.5%) 42.00
+SGST (2.5%) 42.00
+Grand Total % 1,799.00
+
+Payment Method -: UPI
+WI Io : nikhilsharma@yb]
+
+Transaction ID : 431289764512
+Payment Status : Success
+
+Thank you for dining with us!
+We hope to see you again soon.
+
+@
+
+THE BANYAN KITCHEN & BAR
+FOOD / DRINKS / FRIENDS
+
+
