@@ -2,18 +2,14 @@ from prompt3 import user_query
 import subprocess
 import re
 
-# Matches ANSI terminal control codes (cursor movement, "erase to end of
-# line", color codes, etc.) that Ollama's CLI can print alongside its
-# output when run as a subprocess. These must be stripped before the text
-# is treated as SQL, or stray sequences like "\x1b[K" end up embedded in
-# the query and break it.
 _ANSI_ESCAPE = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
 
 
 def response_to_user_query(user_input: str) -> str:
     prompt = user_query(user_input)
     process = subprocess.Popen(
-        ["ollama", "run", "qwen2.5:3b"],
+
+        ["ollama", "run", "--nowordwrap", "qwen2.5:3b"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
