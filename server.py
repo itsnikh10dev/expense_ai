@@ -1,27 +1,3 @@
-"""
-ExpenseAI backend API.
-
-This file REPLACES app.py as the entry point (you now run `python server.py`
-instead of `streamlit run app.py`). It does not reimplement any business
-logic — it calls exactly the same modules and functions your original
-Streamlit app called:
-
-    ollama3.response_to_user_query
-    image_cleaning.image_cleaning
-    ocr_processor.perform_ocr
-    parser.parse_multiple_invoices
-    data_insertion.insert_extracted_data
-
-Those files are untouched. This server just exposes them as a small JSON
-API and serves the new static/ frontend (HTML/CSS/JS) instead of Streamlit
-widgets.
-
-Run:
-    pip install flask
-    python server.py
-Then open http://localhost:5000
-"""
-
 import re
 import sqlite3
 import threading
@@ -34,9 +10,8 @@ from flask import Flask, jsonify, request, send_from_directory
 
 from ollama3 import response_to_user_query
 
-# ============================================================
+
 # PATHS — identical to the original app.py
-# ============================================================
 
 BASE_DIR = Path(__file__).resolve().parent
 DB_NAME = BASE_DIR / "ocr_master.db"
@@ -47,10 +22,9 @@ EXTRACTED_TEXT_FILE = BASE_DIR / "extracted_text.txt"
 
 ALLOWED_UPLOAD_EXTENSIONS = {".jpg", ".jpeg", ".png", ".pdf"}
 
-# ============================================================
+
 # DB HELPERS — copied verbatim from the original app.py.
 # Same read-only guardrails, same behaviour.
-# ============================================================
 
 
 def get_table_columns():
@@ -109,9 +83,8 @@ def _df_to_records(df: pd.DataFrame):
     return df.replace({np.nan: None}).to_dict(orient="records")
 
 
-# ============================================================
+
 # APP
-# ============================================================
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 
@@ -121,9 +94,7 @@ def index():
     return send_from_directory(app.static_folder, "index.html")
 
 
-# ------------------------------------------------------------
 # Dashboard — same aggregations as the Streamlit Dashboard page
-# ------------------------------------------------------------
 
 @app.route("/api/dashboard")
 def api_dashboard():
@@ -166,10 +137,8 @@ def api_dashboard():
     return jsonify(result)
 
 
-# ------------------------------------------------------------
 # Expenses — same filtering behaviour as the Streamlit Expenses page,
 # extended with search/date since the brief asked for them.
-# ------------------------------------------------------------
 
 @app.route("/api/expenses/filters")
 def api_expense_filters():
@@ -240,9 +209,7 @@ def api_expenses():
     })
 
 
-# ------------------------------------------------------------
 # Upload — same "never overwrite" filename logic as the original
-# ------------------------------------------------------------
 
 @app.route("/api/upload", methods=["POST"])
 def api_upload():
@@ -268,11 +235,9 @@ def api_upload():
     return jsonify({"filename": candidate.name})
 
 
-# ------------------------------------------------------------
 # Processing pipeline — same five calls the original "Process Bill"
 # button made, run in a background thread so the frontend can show
 # real (not simulated) step-by-step progress by polling status.
-# ------------------------------------------------------------
 
 JOBS = {}
 JOBS_LOCK = threading.Lock()
@@ -394,9 +359,7 @@ def api_process_status(job_id):
     return jsonify(job)
 
 
-# ------------------------------------------------------------
 # AI Assistant — same natural-language -> SQL -> SQLite flow
-# ------------------------------------------------------------
 
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
